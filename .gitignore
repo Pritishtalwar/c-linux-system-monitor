@@ -1,0 +1,22 @@
+# Compiled object files
+*.o
+
+# Executable files
+*.out
+*.exe
+system_monitor
+
+# Build directory
+build/
+
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# OS files
+.DS_Store
+
+# Log files
+logs/*.log
