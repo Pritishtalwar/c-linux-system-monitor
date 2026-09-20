@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Iinclude
 
 TARGET = system_monitor
 
-SRC = src/main.c
+SRC = src/main.c src/process.c
 
 $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)

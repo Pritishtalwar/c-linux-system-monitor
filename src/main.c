@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "process.h"
 void showMenu(void)
 {
     printf("\n");
@@ -30,7 +30,7 @@ int main(void)
         switch (choice)
         {
             case 1:
-                printf("Running Processes selected.\n");
+                listProcesses();
                 break;
 
             case 2:
