@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "process.h"
 #include "proc_reader.h"
+#include "system_info.h"
 
 void showMenu(void)
 {
@@ -62,9 +63,9 @@ int main(void)
                 break;
 
             case 5:
-                printf("System Information selected.\n");
+                showSystemInfo();
                 break;
-
+                
             case 6:
                 printf("View Logs selected.\n");
                 break;
