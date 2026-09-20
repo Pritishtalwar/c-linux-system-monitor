@@ -1,11 +1,67 @@
 #include <stdio.h>
 
+void showMenu(void)
+{
+    printf("\n");
+    printf("========================================\n");
+    printf("        LINUX SYSTEM MONITOR\n");
+    printf("========================================\n");
+    printf("1. Show Running Processes\n");
+    printf("2. Search Process\n");
+    printf("3. Process Details\n");
+    printf("4. Kill Process\n");
+    printf("5. System Information\n");
+    printf("6. View Logs\n");
+    printf("7. Exit\n");
+    printf("========================================\n");
+}
+
 int main(void)
 {
-    printf("=====================================\n");
-    printf("      C LINUX SYSTEM MONITOR\n");
-    printf("=====================================\n");
-    printf("Project started successfully!\n");
+    int choice;
+
+    do
+    {
+        showMenu();
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+                printf("Running Processes selected.\n");
+                break;
+
+            case 2:
+                printf("Search Process selected.\n");
+                break;
+
+            case 3:
+                printf("Process Details selected.\n");
+                break;
+
+            case 4:
+                printf("Kill Process selected.\n");
+                break;
+
+            case 5:
+                printf("System Information selected.\n");
+                break;
+
+            case 6:
+                printf("View Logs selected.\n");
+                break;
+
+            case 7:
+                printf("Exiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+
+    } while (choice != 7);
 
     return 0;
 }
