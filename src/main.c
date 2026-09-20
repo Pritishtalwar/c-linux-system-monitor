@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "process.h"
+#include "proc_reader.h"
+
 void showMenu(void)
 {
     printf("\n");
@@ -34,12 +36,26 @@ int main(void)
                 break;
 
             case 2:
-                printf("Search Process selected.\n");
-                break;
+            {
+                char query[256];
 
-            case 3:
-                printf("Process Details selected.\n");
+                printf("Enter process name to search: ");
+                scanf("%255s", query);
+
+                searchProcess(query);
                 break;
+            }
+            
+            case 3:
+            {
+                int pid;
+
+                printf("Enter PID: ");
+                scanf("%d", &pid);
+
+                showProcessDetails(pid);
+                break;
+            }
 
             case 4:
                 printf("Kill Process selected.\n");
