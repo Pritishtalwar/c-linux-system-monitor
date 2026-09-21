@@ -3,10 +3,11 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "process.h"
 #include "proc_reader.h"
 #include "process_metrics.h"
+#include <errno.h>
+#include <limits.h>
 
 
 /* =========================================================
@@ -300,7 +301,7 @@ void monitorProcesses(void)
     while (1)
     {
         /*
-         * Clear terminal screen.
+         * Clear terminal screen and move cursor to top.
          */
         printf("\033[2J");
         printf("\033[H");
@@ -309,11 +310,18 @@ void monitorProcesses(void)
         printf("                    LIVE SYSTEM MONITOR\n");
         printf("===============================================================\n");
 
+        printf("Press ENTER to refresh.\n");
+        printf("Press q + ENTER to exit.\n\n");
+
         listProcesses();
 
-        printf("\n");
-        printf("Press ENTER to refresh or type q and press ENTER to exit: ");
+        printf("\nRefreshing monitor...\n");
 
+        /*
+         * Wait for user input before the next refresh.
+         * This keeps the monitor simple and avoids
+         * unnecessary CPU consumption.
+         */
         if (fgets(input, sizeof(input), stdin) == NULL)
         {
             break;
@@ -325,38 +333,54 @@ void monitorProcesses(void)
         }
     }
 }
-
-
 /* =========================================================
    INTEGER INPUT VALIDATION
    ========================================================= */
 
 int getIntegerInput(const char *prompt)
 {
-    int value;
-    int result;
+    char input[100];
+    char *endPtr;
+    long value;
 
     while (1)
     {
         printf("%s", prompt);
 
-        result = scanf("%d", &value);
-
-        if (result == 1)
+        if (fgets(input, sizeof(input), stdin) == NULL)
         {
-            /*
-             * Remove remaining characters from input buffer.
-             */
-            while (getchar() != '\n');
-
-            return value;
+            return -1;
         }
 
-        printf("Invalid input. Please enter a number.\n");
+        errno = 0;
 
-        /*
-         * Clear invalid input.
-         */
-        while (getchar() != '\n');
+        value = strtol(input, &endPtr, 10);
+
+        if (endPtr == input)
+        {
+            printf("Invalid input. Please enter a number.\n");
+            continue;
+        }
+
+        while (*endPtr == ' ' || *endPtr == '\t')
+        {
+            endPtr++;
+        }
+
+        if (*endPtr != '\n' && *endPtr != '\0')
+        {
+            printf("Invalid input. Please enter a valid number.\n");
+            continue;
+        }
+
+        if (errno == ERANGE ||
+            value < INT_MIN ||
+            value > INT_MAX)
+        {
+            printf("Number is out of range.\n");
+            continue;
+        }
+
+        return (int)value;
     }
 }

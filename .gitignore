@@ -20,3 +20,6 @@ build/
 
 # Log files
 logs/*.log
+
+# IntelliJ IDEA
+.idea/
