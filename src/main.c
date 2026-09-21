@@ -1,8 +1,10 @@
 #include <stdio.h>
+
 #include "process.h"
 #include "proc_reader.h"
 #include "system_info.h"
 #include "process_manager.h"
+#include "logger.h"
 
 void showMenu(void)
 {
@@ -16,7 +18,9 @@ void showMenu(void)
     printf("4. Kill Process\n");
     printf("5. System Information\n");
     printf("6. View Logs\n");
-    printf("7. Exit\n");
+    printf("7. Live System Monitor\n");
+    printf("8. Sort Processes\n");
+    printf("9. Exit\n");
     printf("========================================\n");
 }
 
@@ -24,12 +28,13 @@ int main(void)
 {
     int choice;
 
+    logMessage("System monitor started");
+
     do
     {
         showMenu();
 
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+        choice = getIntegerInput("Enter your choice: ");
 
         switch (choice)
         {
@@ -44,33 +49,72 @@ int main(void)
                 printf("Enter process name to search: ");
                 scanf("%255s", query);
 
+                while (getchar() != '\n');
+
                 searchProcess(query);
+                logMessage("Process search performed");
                 break;
             }
-            
+
             case 3:
             {
                 int pid;
 
-                printf("Enter PID: ");
-                scanf("%d", &pid);
+                pid = getIntegerInput("Enter PID: ");
 
                 showProcessDetails(pid);
+                logMessage("Process details viewed");
                 break;
             }
+
             case 4:
                 showProcessManagement();
+                logMessage("Process management viewed");
                 break;
 
             case 5:
                 showSystemInfo();
-                break;
-                
-            case 6:
-                printf("View Logs selected.\n");
+                logMessage("System information viewed");
                 break;
 
+            case 6:
+            {
+                FILE *logFile;
+                char line[512];
+
+                logFile = fopen("logs/monitor.log", "r");
+
+                if (logFile == NULL)
+                {
+                    printf("No logs available yet.\n");
+                    break;
+                }
+
+                printf("\n========================================\n");
+                printf("              LOGS\n");
+                printf("========================================\n");
+
+                while (fgets(line, sizeof(line), logFile) != NULL)
+                {
+                    printf("%s", line);
+                }
+
+                fclose(logFile);
+                break;
+            }
+
             case 7:
+                monitorProcesses();
+                logMessage("Live system monitor used");
+                break;
+
+            case 8:
+                sortProcesses();
+                logMessage("Process sorting performed");
+                break;
+            
+            case 9:
+                logMessage("System monitor exited");
                 printf("Exiting...\n");
                 break;
 
@@ -78,7 +122,7 @@ int main(void)
                 printf("Invalid choice. Please try again.\n");
         }
 
-    } while (choice != 7);
+    } while (choice != 9);
 
     return 0;
 }

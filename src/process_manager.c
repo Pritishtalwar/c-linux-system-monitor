@@ -3,9 +3,20 @@
 #include <errno.h>
 
 #include "process_manager.h"
+#include "process.h"
+
+
+/* =========================================================
+   SEND SIGNAL TO PROCESS
+   ========================================================= */
 
 int sendProcessSignal(int pid, int signal_number)
 {
+    if (pid <= 0)
+    {
+        return 0;
+    }
+
     if (kill(pid, signal_number) == 0)
     {
         return 1;
@@ -13,6 +24,11 @@ int sendProcessSignal(int pid, int signal_number)
 
     return 0;
 }
+
+
+/* =========================================================
+   PROCESS MANAGEMENT MENU
+   ========================================================= */
 
 void showProcessManagement(void)
 {
@@ -25,8 +41,13 @@ void showProcessManagement(void)
     printf("        PROCESS MANAGEMENT\n");
     printf("========================================\n");
 
-    printf("Enter PID: ");
-    scanf("%d", &pid);
+    pid = getIntegerInput("Enter PID: ");
+
+    if (pid <= 0)
+    {
+        printf("Invalid PID. PID must be greater than 0.\n");
+        return;
+    }
 
     printf("\n");
     printf("1. Terminate Process (SIGTERM)\n");
@@ -34,8 +55,7 @@ void showProcessManagement(void)
     printf("3. Stop Process (SIGSTOP)\n");
     printf("4. Continue Process (SIGCONT)\n");
 
-    printf("Enter signal choice: ");
-    scanf("%d", &choice);
+    choice = getIntegerInput("Enter signal choice: ");
 
     switch (choice)
     {
@@ -76,9 +96,13 @@ void showProcessManagement(void)
         {
             printf("Permission denied.\n");
         }
+        else if (errno == EINVAL)
+        {
+            printf("Invalid signal.\n");
+        }
         else
         {
-            printf("An error occurred while sending the signal.\n");
+            printf("An unexpected error occurred.\n");
         }
     }
 }
