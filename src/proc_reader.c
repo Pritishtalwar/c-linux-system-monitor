@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "proc_reader.h"
+#include "process_metrics.h"
 
 int readProcessInfo(int pid, ProcessInfo *info)
 {
@@ -62,6 +63,7 @@ int readProcessInfo(int pid, ProcessInfo *info)
 void showProcessDetails(int pid)
 {
     ProcessInfo info;
+    double cpuUsage;
 
     if (!readProcessInfo(pid, &info))
     {
@@ -69,6 +71,8 @@ void showProcessDetails(int pid)
         printf("The process may have ended or permission may be denied.\n");
         return;
     }
+
+    cpuUsage = getProcessCpuUsage(pid);
 
     printf("\n========================================\n");
     printf("        PROCESS DETAILS\n");
@@ -79,6 +83,7 @@ void showProcessDetails(int pid)
     printf("State      : %s\n", info.state);
     printf("Parent PID : %d\n", info.parent_pid);
     printf("Memory     : %lu KB\n", info.memory_kb);
+    printf("CPU Usage  : %.2f%%\n", cpuUsage);
     printf("Threads    : %d\n", info.threads);
 
     printf("========================================\n");
