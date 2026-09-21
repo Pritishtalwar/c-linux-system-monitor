@@ -2,6 +2,7 @@
 #include "process.h"
 #include "proc_reader.h"
 #include "system_info.h"
+#include "process_manager.h"
 
 void showMenu(void)
 {
@@ -57,9 +58,8 @@ int main(void)
                 showProcessDetails(pid);
                 break;
             }
-
             case 4:
-                printf("Kill Process selected.\n");
+                showProcessManagement();
                 break;
 
             case 5:
