@@ -39,3 +39,18 @@ The project is designed to demonstrate core C programming and Linux system progr
 - Make
 - Linux `/proc` filesystem
 - Git and GitHub
+
+## Prerequisites
+
+- Linux system or Ubuntu environment
+- GCC compiler
+- GNU Make
+- Git
+
+## Build and Run
+
+Clone the repository and move into the project directory:
+
+```bash
+git clone https://github.com/Pritishtalwar/c-linux-system-monitor.git
+cd c-linux-system-monitor
